@@ -1,12 +1,13 @@
+from datetime import datetime
 """ 
 Module holds User CRUD Functions
 Also holds Database of users (not persisted)
 """
 
 accounts_database = [
-    {'name':'Seyi', 'password':'passwordSeyi','balance':0},
-    {'name':'Mike', 'password':'passwordMike','balance':0},
-    {'name':'Love', 'password':'passwordLove','balance':0}
+    {'name':'Seyi', 'account_number':'2012345670', 'password':'passwordSeyi','balance':0},
+    {'name':'Mike','account_number':'2012673487', 'password':'passwordMike','balance':0},
+    {'name':'Love','account_number':'2201234567', 'password':'passwordLove','balance':0}
 ]
 
 
@@ -22,14 +23,19 @@ def login(name,password):
             return "success"
         else:
             return "Invalid password"
-    
 
+def generate_account_number():
+    gen_number = datetime.now().timestamp()
+    account_number = str(gen_number).split(".")[0]
+    return account_number
+      
 def create_account(name, password):
     if type(name) != str and type(password) != str:
         raise TypeError
     user_list = list(filter(lambda account: account['name'] == name, accounts_database))
     if user_list == []:
-        new_user = {'name': name, 'password': password, 'balance':0 }
+        account_number = generate_account_number()
+        new_user = {'name': name,'account_number':account_number, 'password': password, 'balance':0 }
         accounts_database.append(new_user)
         return True
     else:
@@ -49,4 +55,3 @@ def get_account(name):
     user_list = list(filter(lambda account: account['name'] == name, accounts_database))
     return user_list[0]
 
-    
